@@ -9,7 +9,8 @@ import net.dv8tion.jda.api.hooks.EventListener;
 
 public class ReadyListener implements EventListener{
     public static void main(String[] args) throws LoginException{
-        String bot_token="OTI2MzExMTIwODU4NDA2OTEy.Yc50dQ.q__URDJJRI01JhBmJqb1p6hY13M";
+        DiscordToken dt=new DiscordToken();
+        String bot_token=dt.getToken();
         JDA jda=JDABuilder.createDefault(bot_token).addEventListeners(new ReadyListener()).build();
     }
 
