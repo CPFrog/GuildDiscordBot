@@ -7,18 +7,21 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class WebCrawler {
-    private String name="CP개구링";
-    private String url="https://lostark.game.onstove.com/Profile/Character/";
-    private String guild=null;
-    WebCrawler(){}
-    WebCrawler(String name) {
-        this.name=name;
+    private String name = "CP개구링";
+    private String url = "https://lostark.game.onstove.com/Profile/Character/";
+    private String guild = null;
+
+    WebCrawler() {
     }
 
-    private Document doc= null;
+    WebCrawler(String name) {
+        this.name = name;
+    }
 
-    private void Crawl() throws IOException{
-        this.url+=name;
+    private Document doc = null;
+
+    private void Crawl() throws IOException {
+        this.url += name;
 
         try {
             doc = Jsoup.connect(url).get();
@@ -28,18 +31,18 @@ public class WebCrawler {
 
         doc.html();
 
-        Elements elem=doc.select("div[class=\"game-info__guild\"]");
+        Elements elem = doc.select("div[class=\"game-info__guild\"]");
 
-        int cnt=0;
-        for(Element e:elem.select("span")){
-            if(e.text().equals("길드"))
+        int cnt = 0;
+        for (Element e : elem.select("span")) {
+            if (e.text().equals("길드"))
                 continue;
-            guild=e.text();
+            guild = e.text();
         }
     }
 
-    public String getGuild(){
-        if(guild==null){
+    public String getGuild() {
+        if (guild == null) {
             try {
                 Crawl();
             } catch (IOException e) {
