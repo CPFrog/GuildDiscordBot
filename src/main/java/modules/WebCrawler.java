@@ -11,10 +11,10 @@ public class WebCrawler {
     private String url = "https://lostark.game.onstove.com/Profile/Character/";
     private String guild = null;
 
-    WebCrawler() {
+    public WebCrawler() {
     }
 
-    WebCrawler(String name) {
+    public WebCrawler(String name) {
         this.name = name;
     }
 
@@ -48,7 +48,6 @@ public class WebCrawler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         return guild;
     }
