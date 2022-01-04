@@ -42,8 +42,8 @@ public class MessageListener extends ListenerAdapter {
                 if (this.mi.signIn(name)) {
                     Member target = event.getMember();
                     Role role = guild.getRolesByName("길드원", true).get(0);
-                    guild.addRoleToMember(target.getId(), role); //ID만 가져오라는데 이거 맞나?
-                    guild.modifyNickname(target,name);
+                    guild.addRoleToMember(target.getId(), role).queue(); //ID만 가져오라는데 이거 맞나?
+                    guild.modifyNickname(target,name).queue();
                 } else {
                     tc.sendMessage(name + "님은 이미 인증된 길드원입니다.").queue();
                     try {
@@ -55,12 +55,12 @@ public class MessageListener extends ListenerAdapter {
             } else {
                 tc.sendMessage(name + "님은 " + gName + " 길드에 가입되어있지 않습니다.").queue();
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1500);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            eraser(event, 2);
+            eraser(event, 3);
             tc.sendMessage("역할을 부여받으려면 '!인증 캐릭터명' 형태로 입력해주세요.").queue();
         } else {
             System.out.printf("[PM] %#s: %s%n", event.getAuthor(), event.getMessage().getContentDisplay());
