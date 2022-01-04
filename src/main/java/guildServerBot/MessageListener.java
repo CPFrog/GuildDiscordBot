@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.entities.*;
 
 import modules.*;
 
@@ -31,41 +32,44 @@ public class MessageListener extends ListenerAdapter {
         if (event.getAuthor().isBot()) return;
         TextChannel tc = event.getTextChannel();
         String message = event.getMessage().getContentRaw();
+        Guild guild = event.getGuild();
         if (message.startsWith("!인증")) {
 //            System.out.println("event :"+event.getMessage().getContentRaw());
-            String gName="밤잠";
+            String gName = "밤잠";
             Verifier vf = new Verifier(gName);
             String name = message.split(" ")[1];
             if (vf.verify(name)) {
                 if (this.mi.signIn(name)) {
-                    eraser(event, 1);
+                    Member target = event.getMember();
+                    Role role = guild.getRolesByName("길드원", true).get(0);
+                    guild.addRoleToMember(target.getId(), role); //ID만 가져오라는데 이거 맞나?
+                    guild.modifyNickname(target,name);
                 } else {
-                    tc.sendMessage(name+"님은 이미 인증된 길드원입니다.").queue();
+                    tc.sendMessage(name + "님은 이미 인증된 길드원입니다.").queue();
                     try {
                         Thread.sleep(2000);
-                    } catch(Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    eraser(event,2);
                 }
             } else {
-                tc.sendMessage(name+"님은 " +gName+" 길드에 가입되어있지 않습니다.").queue();
+                tc.sendMessage(name + "님은 " + gName + " 길드에 가입되어있지 않습니다.").queue();
                 try {
                     Thread.sleep(2000);
-                } catch(Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                eraser(event,2);
             }
-
+            eraser(event, 2);
+            tc.sendMessage("역할을 부여받으려면 '!인증 캐릭터명' 형태로 입력해주세요.").queue();
         } else {
             System.out.printf("[PM] %#s: %s%n", event.getAuthor(), event.getMessage().getContentDisplay());
         }
     }
 
-    public void eraser(MessageReceivedEvent event, int count){
-        TextChannel tc=event.getTextChannel();
-        MessageHistory mh=new MessageHistory(tc);
+    public void eraser(MessageReceivedEvent event, int count) {
+        TextChannel tc = event.getTextChannel();
+        MessageHistory mh = new MessageHistory(tc);
         List<Message> msg = mh.retrievePast(count).complete();
         tc.deleteMessages(msg).complete();
     }
