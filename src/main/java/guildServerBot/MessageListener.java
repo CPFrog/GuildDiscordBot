@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MessageListener extends ListenerAdapter {
     memberInfo mi = new memberInfo();
-    String gName = "밤잠";
+    private String gName = "밤잠";
 
     public static void main(String[] args) throws LoginException {
         DiscordToken dt = new DiscordToken();
@@ -113,6 +113,10 @@ public class MessageListener extends ListenerAdapter {
         List<Message> msg = mh.retrievePast(count).complete();
         tc.deleteMessages(msg).complete();
         tc.sendMessage("역할을 부여받으려면 '!인증 캐릭터명' 형태로 입력해주세요.").queue();
+    }
+
+    public void setgName(String gName) {
+        this.gName = gName;
     }
 }
 
