@@ -87,13 +87,15 @@ public class MessageListener extends ListenerAdapter {
                 eraser(event, 3);
             }
             // 임원 이상급 멤버인 경우 검색 길드명 설정 가능하도록 하는 권한 부여. 추후 구현.
-//            else if(message.startsWith("!길드설정")){
-//                List<Member> members=guild.getMembersWithRoles(guild.getRolesByName("길드원",true))
-//                gName = message.split(" ")[1].trim();
-//
-//                tc.sendMessage("길드 이름을 <"+gName+">으로 설정했습니다.");
-//            }
-            else {
+            else if (message.startsWith("!길드설정")) {
+                List<Member> members = guild.getMembersWithRoles(guild.getRolesByName("길드원", true));
+                String unvarifiedName = message.split(" ")[1].trim();
+                Member sender = event.getMember();
+                if (members.contains(sender)) {
+                    setgName(unvarifiedName);
+                    tc.sendMessage("길드 이름을 <" + gName + ">으로 설정했습니다.");
+                }
+            } else {
                 tc.sendMessage("명령어의 형태가 잘못되었습니다. !명령어 를 사용해서 전체 명령어를 확인하실 수 있습니다.");
                 try {
                     Thread.sleep(1500);
