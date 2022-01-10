@@ -91,7 +91,7 @@ public class MessageListener extends ListenerAdapter {
                 List<Member> members = guild.getMembersWithRoles(guild.getRolesByName("길드원", true));
                 String unvarifiedName = message.split(" ")[1].trim();
                 Member sender = event.getMember();
-                if (members.contains(sender)) {
+                if (!members.contains(sender)) {
                     setgName(unvarifiedName);
                     tc.sendMessage("길드 이름을 <" + gName + ">으로 설정했습니다.");
                 }
