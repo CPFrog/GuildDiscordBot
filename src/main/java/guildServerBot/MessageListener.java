@@ -13,6 +13,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.entities.*;
 
 import modules.*;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import java.util.List;
 
@@ -25,7 +27,8 @@ public class MessageListener extends ListenerAdapter {
     public static void main(String[] args) throws LoginException {
         DiscordToken dt = new DiscordToken();
         String bot_token = dt.getToken();
-        JDA jda = JDABuilder.createDefault(bot_token).build();
+        JDA jda = JDABuilder.createDefault(bot_token).setMemberCachePolicy(MemberCachePolicy.ALL).enableIntents(GatewayIntent.GUILD_MEMBERS).build();
+        // 멤버 리스트 안나오는 현상 수정 참고 : https://stackoverflow.com/questions/61226721/discord-jda-invalid-member-list
         jda.addEventListener(new MessageListener());
     }
 
@@ -89,10 +92,15 @@ public class MessageListener extends ListenerAdapter {
             // 임원 이상급 멤버인 경우 검색 길드명 설정 가능하도록 하는 권한 부여. 추후 구현.
             else if (message.startsWith("!길드설정")) {
                 List<Role> roleList=guild.getRolesByName("길드원",false);
+
                 List<Member> members = guild.getMembersWithRoles(roleList);
                 String unvarifiedName = message.split(" ")[1].trim();
                 Member sender = event.getMember();
+                System.out.println(guild.getRoles());
                 System.out.println(guild.getMembers());
+                for(Role r:roleList){
+                    System.out.println(r.getName()+" "+r.getId());
+                }
                 System.out.println(roleList);
                 System.out.println(members);
                 System.out.println(sender);
