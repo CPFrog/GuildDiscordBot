@@ -2,7 +2,6 @@ package modules;
 
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +13,7 @@ public class GuildManager {
         this.gName = name;
     }
 
-    public String editGuildName(MessageReceivedEvent event)
-    // 임원 이상급 멤버인 경우 검색 길드명 설정 가능하도록 하는 권한 부여. 추후 구현.
-    {
+    public String editGuildName(MessageReceivedEvent event) {
         Guild guild = event.getGuild();
         String message = event.getMessage().getContentRaw();
         TextChannel tc = event.getTextChannel();
@@ -35,8 +32,26 @@ public class GuildManager {
         } else {
             tc.sendMessage("길드 설정을 변경하려면 임원 이상의 권한이 필요합니다.").queue();
         }
-        eraser(2, event, 3);
+        eraser(2, event, 2);
         return targetName;
+    }
+
+    public void deleteInfo(MessageReceivedEvent event){
+        TextChannel tc= event.getTextChannel();
+        tc.sendMessage("지원 예정입니다.").queue();
+        eraser(2,event,2);
+    }
+
+    public void guide(MessageReceivedEvent event) {
+        TextChannel tc = event.getTextChannel();
+        tc.sendMessage("이 봇에서 지원되는 임원진 전용 명령어입니다.\n.길드변경/.길드설정 (길드이름) : 길드원 여부를 판단하는 기준 길드명을 변경합니다.\n.삭제 (캐릭터명) : 해당 캐릭터의 기존에 인증 정보를 삭제합니다.").queue();
+        eraser(5, event, 2);
+    }
+
+    public void commandError(MessageReceivedEvent event) {
+        TextChannel tc = event.getTextChannel();
+        tc.sendMessage("잘못된 명령어입니다.\n'.명령어'를 사용해 지원하는 명령어 양식을 다시 확인해주세요.").queue();
+        eraser(3, event, 2);
     }
 
     private void eraser(float delaySec, MessageReceivedEvent event, int count) {

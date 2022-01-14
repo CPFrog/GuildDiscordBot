@@ -3,7 +3,6 @@ package modules;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MembersManager {
@@ -45,13 +44,13 @@ public class MembersManager {
 
     public void guide(MessageReceivedEvent event) {
         TextChannel tc = event.getTextChannel();
-        tc.sendMessage("이 봇에서 지원되는 명령어입니다.\n!인증 (캐릭터명) : 길드원 인증 명령어입니다.\n!길드설정 (길드명) : 길드원 여부를 판단하는 길드명을 설정합니다.").queue();
+        tc.sendMessage("이 봇에서 지원되는 명령어입니다.\n!인증 (캐릭터명) : 길드원 인증 명령어입니다.").queue();
         eraser(3, event, 3);
     }
 
     public void commandError(MessageReceivedEvent event) {
         TextChannel tc = event.getTextChannel();
-        tc.sendMessage("이 봇에서 지원되는 명령어입니다.\n!인증 (캐릭터명) : 길드원 인증 명령어입니다.\n!길드설정 (길드명) : 길드원 여부를 판단하는 길드명을 설정합니다.").queue();
+        tc.sendMessage("잘못된 명령어입니다.\n'!명령어'를 사용해 지원되는 명령어 양식을 다시 확인해주세요.").queue();
         eraser(3, event, 3);
     }
 

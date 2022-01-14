@@ -4,9 +4,7 @@ import javax.security.auth.login.LoginException;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -16,7 +14,6 @@ import modules.*;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //ref: https://blog.naver.com/PostView.naver?blogId=duckhyun4433&logNo=221982334696&parentCategoryNo=&categoryNo=52&viewDate=&isShowPopularPosts=true&from=search
@@ -46,7 +43,7 @@ public class MessageListener extends ListenerAdapter {
                 break;
             }
         }
-        tc.sendMessage("역할을 부여받으려면 '!인증 캐릭터명' 형태로 입력해주세요.").queue();
+        tc.sendMessage("길드원 여부를 인증하시려면 '!인증 캐릭터명' 형태로 입력해주세요.").queue();
     }
 
     @Override
@@ -56,19 +53,27 @@ public class MessageListener extends ListenerAdapter {
         if (event.getChannel().getName().equals("인증")) {
             if (message.startsWith("!인증"))
                 this.manager.verify(event, mi);
+
             else if (message.startsWith("!명령어"))
                 this.manager.guide(event);
+
             else
                 this.manager.commandError(event);
         }
         else if(event.getChannel().getName().equals("임원")){
-            if (message.startsWith("@길드변경")){
+            if (message.startsWith(".길드변경") || message.startsWith(".길드설정")){
                 gName=this.gm.editGuildName(event);
                 this.manager.setgName(gName);
             }
-            if (message.startsWith("@강제인증")){
-                // 강제 길드원 인증과 관련된 작업 수행
-            }
+            else if (message.startsWith(".삭제"))
+                this.gm.deleteInfo(event);
+
+            else if (message.startsWith(".명령어"))
+                this.gm.guide(event);
+
+            else
+                this.gm.commandError(event);
+
         } else {
             System.out.printf("[%s] %#s: %s%n", event.getChannel().getName(), event.getAuthor(), event.getMessage().getContentDisplay());
         }
