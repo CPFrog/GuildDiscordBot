@@ -66,7 +66,7 @@ public class MessageListener extends ListenerAdapter {
                 this.manager.setgName(gName);
             }
             else if (message.startsWith(".삭제"))
-                this.gm.deleteInfo(event);
+                this.gm.deleteInfo(event, mi);
 
             else if (message.startsWith(".명령어"))
                 this.gm.guide(event);

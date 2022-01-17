@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuildManager {
-    private String gName = "";
+    private String gName;
 
     public GuildManager(String name) {
         this.gName = name;
@@ -36,9 +36,16 @@ public class GuildManager {
         return targetName;
     }
 
-    public void deleteInfo(MessageReceivedEvent event){
+    public void deleteInfo(MessageReceivedEvent event, MemberInfo mi){
         TextChannel tc= event.getTextChannel();
-        tc.sendMessage("지원 예정입니다.").queue();
+        String message=event.getMessage().getContentRaw();
+        String targetName=message.split(" ")[1].trim();
+        int returnCode = mi.forceDelete(targetName);
+        switch (returnCode) {
+            case 0 -> tc.sendMessage(targetName + "님에 대한 인증정보가 삭제되었습니다.").queue();
+            case 1 -> tc.sendMessage(targetName + "님에 대한 인증정보가 존재하지 않습니다.").queue();
+            case 2 -> tc.sendMessage("인증 테이블이 존재하지 않습니다. 봇 관리자에게 문의해주세요.").queue();
+        }
         eraser(2,event,2);
     }
 
