@@ -13,9 +13,4 @@ public class GuildVerifier {
 
         return this.curGuildName.equals(guild);
     }
-
-    // 매일 디코 멤버의 로아 길드 가입 여부 확인 함수
-    public void dailyrenewal(MemberInfo mi) {
-        WebCrawler wc = new WebCrawler();
-    }
 }

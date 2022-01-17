@@ -51,8 +51,8 @@ public class GuildManager {
 
     public void guide(MessageReceivedEvent event) {
         TextChannel tc = event.getTextChannel();
-        tc.sendMessage("이 봇에서 지원되는 임원진 전용 명령어입니다.\n.길드변경/.길드설정 (길드이름) : 길드원 여부를 판단하는 기준 길드명을 변경합니다.\n.삭제 (캐릭터명) : 해당 캐릭터의 기존에 인증 정보를 삭제합니다.").queue();
-        eraser(5, event, 2);
+        tc.sendMessage("이 봇에서 지원되는 임원진 전용 명령어입니다.\n.길드변경/.길드설정 (길드이름) : 길드원 여부를 판단하는 기준 길드명을 변경합니다.\n.삭제 (캐릭터명) : 해당 캐릭터의 기존에 인증 정보를 삭제합니다.\n.갱신 : 길드원 인증 정보를 즉시 갱신합니다.").queue();
+        eraser(7, event, 2);
     }
 
     public void commandError(MessageReceivedEvent event) {

@@ -22,7 +22,7 @@ public class MessageListener extends ListenerAdapter {
     private MemberInfo mi = new MemberInfo();
     private String gName = "밤잠";
     private MembersManager manager = new MembersManager(this.gName);
-    private GuildManager gm=new GuildManager(this.gName);
+    private GuildManager gm = new GuildManager(this.gName);
 
     public static void main(String[] args) throws LoginException {
         DiscordToken dt = new DiscordToken();
@@ -46,6 +46,7 @@ public class MessageListener extends ListenerAdapter {
         tc.sendMessage("길드원 여부를 인증하시려면 '!인증 캐릭터명' 형태로 입력해주세요.").queue();
     }
 
+
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
@@ -59,18 +60,17 @@ public class MessageListener extends ListenerAdapter {
 
             else
                 this.manager.commandError(event);
-        }
-        else if(event.getChannel().getName().equals("임원")){
-            if (message.startsWith(".길드변경") || message.startsWith(".길드설정")){
-                gName=this.gm.editGuildName(event);
+        } else if (event.getChannel().getName().equals("임원")) {
+            if (message.startsWith(".길드변경") || message.startsWith(".길드설정")) {
+                gName = this.gm.editGuildName(event);
                 this.manager.setgName(gName);
-            }
-            else if (message.startsWith(".삭제"))
+            } else if (message.startsWith(".삭제"))
                 this.gm.deleteInfo(event, mi);
 
             else if (message.startsWith(".명령어"))
                 this.gm.guide(event);
-
+            else if (message.startsWith(".갱신"))
+                mi.refresh(gName);
             else
                 this.gm.commandError(event);
 
