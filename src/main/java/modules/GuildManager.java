@@ -73,4 +73,16 @@ public class GuildManager {
         tc.deleteMessages(msg).complete();
     }
 
+    public void searchTroubles(MessageReceivedEvent event){
+        TextChannel tc=event.getTextChannel();
+        WebCrawler wc=new WebCrawler();
+        String message = event.getMessage().getContentRaw();
+        String targetName = message.split(" ")[1].trim();
+        ArrayList<String> links=wc.getTroubles(targetName);
+        tc.sendMessage(targetName+"로 최근 10만개 사사게 게시글의 제목+내용 검색결과, "+links.size()+"건 검색되었습니다.").queue();
+        String linkStream="";
+        for(String s:links)
+            linkStream+=(s+"\n");
+        tc.sendMessage(linkStream).queue();
+    }
 }

@@ -71,6 +71,8 @@ public class MessageListener extends ListenerAdapter {
                 this.gm.guide(event);
             else if (message.startsWith(".갱신"))
                 mi.refresh(gName);
+            else if (message.startsWith(".사사게") || message.startsWith(".사사게검색"))
+                this.gm.searchTroubles(event);
             else
                 this.gm.commandError(event);
 
