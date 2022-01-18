@@ -15,7 +15,8 @@ public class WebCrawler {
     private String troubleURL_p3 = "&sterm=";
     private String guild = null;
 
-    public WebCrawler(){}
+    public WebCrawler() {
+    }
 
     public WebCrawler(String name) {
         this.name = name;
@@ -69,33 +70,34 @@ public class WebCrawler {
         return startNum - Integer.parseInt(numbers.get(1).text());
     }
 
-    public ArrayList<String> getTroubles(String keyword) {
+    public String getTroubles(String keyword) {
         int startNum = recent_no();
         String invenURL = troubleURL_p1 + troubleURL_p2 + keyword + troubleURL_p3;
-        ArrayList<String> urls = new ArrayList<>();
+        int count = 0;
         for (int i = 0; i < 10; i++) {
             int stermNo = startNum + 10000 * i;
-            invenURL.concat(Integer.toString(stermNo));
             try {
-                doc = Jsoup.connect(invenURL).get();
+                doc = Jsoup.connect(invenURL + stermNo).get();
             } catch (IOException e) {
                 System.out.println("IO 예외 발생!");
                 e.printStackTrace();
             }
             doc.html();
             Elements links = doc.select("a[class=\"subject-link\"]");
-            if (links.size() > 0) {
-                for (Element e : links) {
-                    String text = e.text();
+            int arrLen = links.size();
+
+            if (arrLen > 1) {
+                for (int j = 1; j < arrLen; j++) {
+                    String text = links.get(j).text();
                     if (text.contains("셀프") || text.contains("셀박"))
                         continue;
                     else {
-                        String link = e.attr("href");
-                        urls.add(link);
+                        String link = links.get(j).attr("href");
+                        count++;
                     }
                 }
             }
         }
-        return urls;
+        return troubleURL_p1 + troubleURL_p2 + keyword + " " + count;
     }
 }

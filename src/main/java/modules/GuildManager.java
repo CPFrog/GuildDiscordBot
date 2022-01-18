@@ -36,17 +36,17 @@ public class GuildManager {
         return targetName;
     }
 
-    public void deleteInfo(MessageReceivedEvent event, MemberInfo mi){
-        TextChannel tc= event.getTextChannel();
-        String message=event.getMessage().getContentRaw();
-        String targetName=message.split(" ")[1].trim();
+    public void deleteInfo(MessageReceivedEvent event, MemberInfo mi) {
+        TextChannel tc = event.getTextChannel();
+        String message = event.getMessage().getContentRaw();
+        String targetName = message.split(" ")[1].trim();
         int returnCode = mi.forceDelete(targetName);
         switch (returnCode) {
             case 0 -> tc.sendMessage(targetName + "님에 대한 인증정보가 삭제되었습니다.").queue();
             case 1 -> tc.sendMessage(targetName + "님에 대한 인증정보가 존재하지 않습니다.").queue();
             case 2 -> tc.sendMessage("인증 테이블이 존재하지 않습니다. 봇 관리자에게 문의해주세요.").queue();
         }
-        eraser(2,event,2);
+        eraser(2, event, 2);
     }
 
     public void guide(MessageReceivedEvent event) {
@@ -73,16 +73,13 @@ public class GuildManager {
         tc.deleteMessages(msg).complete();
     }
 
-    public void searchTroubles(MessageReceivedEvent event){
-        TextChannel tc=event.getTextChannel();
-        WebCrawler wc=new WebCrawler();
+    public void searchTroubles(MessageReceivedEvent event) {
+        TextChannel tc = event.getTextChannel();
+        WebCrawler wc = new WebCrawler();
         String message = event.getMessage().getContentRaw();
         String targetName = message.split(" ")[1].trim();
-        ArrayList<String> links=wc.getTroubles(targetName);
-        tc.sendMessage(targetName+"로 최근 10만개 사사게 게시글의 제목+내용 검색결과, "+links.size()+"건 검색되었습니다.").queue();
-        String linkStream="";
-        for(String s:links)
-            linkStream+=(s+"\n");
-        tc.sendMessage(linkStream).queue();
+        String[] result = wc.getTroubles(targetName).split(" ");
+        tc.sendMessage("["+targetName + "] 검색어로 최근 10만개 게시글의 제목+내용 검색결과, " + result[1] + "건 검색되었습니다.\n제목에 '셀프' 또는 '셀박'이 포함된 경우 합산하지 않았습니다.").queue();
+        tc.sendMessage("사사게 검색 바로가기: " + result[0]).queue();
     }
 }
