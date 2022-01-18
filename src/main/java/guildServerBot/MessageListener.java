@@ -25,14 +25,10 @@ public class MessageListener extends ListenerAdapter {
     private GuildManager gm = new GuildManager(this.gName);
 
     public static void main(String[] args) throws LoginException {
-        String bot_token;
-        try {
-            DiscordToken dt = new DiscordToken();
-            bot_token = dt.getToken();
-        }
-        catch(Exception e) {
-            bot_token=System.getenv("dt");
-        }
+//        String bot_token = dt.getToken();
+
+        String bot_token=System.getenv("dt");
+
         JDA jda = JDABuilder.createDefault(bot_token).setMemberCachePolicy(MemberCachePolicy.ALL).enableIntents(GatewayIntent.GUILD_MEMBERS).build();
         // 멤버 리스트 안나오는 현상 수정 참고 : https://stackoverflow.com/questions/61226721/discord-jda-invalid-member-list
         jda.addEventListener(new MessageListener());
