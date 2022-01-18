@@ -25,9 +25,10 @@ public class MessageListener extends ListenerAdapter {
     private GuildManager gm = new GuildManager(this.gName);
 
     public static void main(String[] args) throws LoginException {
-//        String bot_token = dt.getToken();
+        DiscordToken dt=new DiscordToken();
+        String bot_token = dt.getToken();
 
-        String bot_token=System.getenv("dt");
+//        String bot_token=System.getenv("dt");
 
         JDA jda = JDABuilder.createDefault(bot_token).setMemberCachePolicy(MemberCachePolicy.ALL).enableIntents(GatewayIntent.GUILD_MEMBERS).build();
         // 멤버 리스트 안나오는 현상 수정 참고 : https://stackoverflow.com/questions/61226721/discord-jda-invalid-member-list
@@ -56,7 +57,6 @@ public class MessageListener extends ListenerAdapter {
         if (event.getChannel().getName().equals("인증")) {
             if (message.startsWith("!인증"))
                 this.manager.verify(event, mi);
-
             else if (message.startsWith("!명령어"))
                 this.manager.guide(event);
 
@@ -68,18 +68,20 @@ public class MessageListener extends ListenerAdapter {
                 this.manager.setgName(gName);
             } else if (message.startsWith(".삭제"))
                 this.gm.deleteInfo(event, mi);
-
+            if (message.startsWith("!사사게") || message.startsWith(".사사게"))
+                this.gm.searchTroubles(event);
             else if (message.startsWith(".명령어"))
                 this.gm.guide(event);
             else if (message.startsWith(".갱신"))
                 mi.refresh(gName);
-            else if (message.startsWith(".사사게") || message.startsWith(".사사게검색"))
-                this.gm.searchTroubles(event);
             else
                 this.gm.commandError(event);
 
         } else {
-            System.out.printf("[%s] %#s: %s%n", event.getChannel().getName(), event.getAuthor(), event.getMessage().getContentDisplay());
+            if (message.startsWith("!사사게"))
+                this.gm.searchTroubles(event);
+            else
+                System.out.printf("[%s] %#s: %s%n", event.getChannel().getName(), event.getAuthor(), event.getMessage().getContentDisplay());
         }
     }
 }
