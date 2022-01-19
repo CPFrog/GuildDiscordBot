@@ -79,7 +79,7 @@ public class GuildManager {
         String message = event.getMessage().getContentRaw();
         String targetName = message.split(" ")[1].trim();
         String[] result = wc.getTroubles(targetName).split(" ");
-        tc.sendMessage("["+targetName + "] 검색어로 최근 10만개 게시글의 제목+내용 검색결과, " + result[1] + "건 검색되었습니다.\n제목에 '셀프' 또는 '셀박'이 포함된 경우 합산하지 않았습니다.").queue();
+        tc.sendMessage("[" + targetName + "] 검색어로 최근 10만개 게시글의 제목+내용 검색결과, " + result[1] + "건 검색되었습니다.\n제목에 '셀프' 또는 '셀박'이 포함된 경우 합산하지 않았습니다.").queue();
         tc.sendMessage("사사게 검색 바로가기: " + result[0]).queue();
     }
 }

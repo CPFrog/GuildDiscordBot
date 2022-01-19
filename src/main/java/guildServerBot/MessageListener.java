@@ -25,7 +25,7 @@ public class MessageListener extends ListenerAdapter {
     private GuildManager gm = new GuildManager(this.gName);
 
     public static void main(String[] args) throws LoginException {
-        DiscordToken dt=new DiscordToken();
+        DiscordToken dt = new DiscordToken();
         String bot_token = dt.getToken();
 
 //        String bot_token=System.getenv("dt");
