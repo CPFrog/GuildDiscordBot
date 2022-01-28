@@ -19,7 +19,7 @@ import java.util.List;
 //ref: https://blog.naver.com/PostView.naver?blogId=duckhyun4433&logNo=221982334696&parentCategoryNo=&categoryNo=52&viewDate=&isShowPopularPosts=true&from=search
 
 public class MessageListener extends ListenerAdapter {
-    private MemberInfo mi = new MemberInfo();
+    public MemberInfo mi = new MemberInfo();
     private String gName = "밤잠";
     private MembersManager manager = new MembersManager(this.gName);
     private GuildManager gm = new GuildManager(this.gName);
@@ -54,12 +54,14 @@ public class MessageListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
         String message = event.getMessage().getContentRaw();
+        System.out.printf("[%s] %#s: %s%n", event.getChannel().getName(), event.getAuthor(), event.getMessage().getContentDisplay());
         if (event.getChannel().getName().equals("인증")) {
             if (message.startsWith("!인증"))
                 this.manager.verify(event, mi);
             else if (message.startsWith("!명령어"))
                 this.manager.guide(event);
-
+            else if (message.startsWith("!변경") || message.startsWith("!닉변"))
+                this.manager.nameChange(event, mi);
             else
                 this.manager.commandError(event);
         } else if (event.getChannel().getName().equals("임원")) {
@@ -68,7 +70,7 @@ public class MessageListener extends ListenerAdapter {
                 this.manager.setgName(gName);
             } else if (message.startsWith(".삭제"))
                 this.gm.deleteInfo(event, mi);
-            if (message.startsWith("!사사게") || message.startsWith(".사사게"))
+            else if (message.startsWith("!사사게") || message.startsWith(".사사게"))
                 this.gm.searchTroubles(event);
             else if (message.startsWith(".명령어"))
                 this.gm.guide(event);
@@ -76,7 +78,6 @@ public class MessageListener extends ListenerAdapter {
                 mi.refresh(gName);
             else
                 this.gm.commandError(event);
-
         } else {
             if (message.startsWith("!사사게"))
                 this.gm.searchTroubles(event);

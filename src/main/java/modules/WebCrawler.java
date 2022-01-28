@@ -5,14 +5,13 @@ import org.jsoup.nodes.*;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class WebCrawler {
     private String name;
     private String infoURL = "https://lostark.game.onstove.com/Profile/Character/";
-    private String troubleURL_p1 = "https://www.inven.co.kr/board/lostark/5355";
-    private String troubleURL_p2 = "?name=subjcont&keyword=";
-    private String troubleURL_p3 = "&sterm=";
+    private final String troubleURL_p1 = "https://www.inven.co.kr/board/lostark/5355";
+    private final String troubleURL_p2 = "?name=subjcont&keyword=";
+    private final String troubleURL_p3 = "&sterm=";
     private String guild = null;
 
     public WebCrawler() {
@@ -86,16 +85,14 @@ public class WebCrawler {
             Elements links = doc.select("a[class=\"subject-link\"]");
             int arrLen = links.size();
 
-            if (arrLen > 1) {
-                for (int j = 1; j < arrLen; j++) {
-                    String text = links.get(j).text();
-                    if (text.contains("셀프") || text.contains("셀박"))
-                        continue;
-                    else {
-                        // 상위 게시글 5개 가져오기 용 코드
+            for (int j = 1; j < arrLen; j++) {
+                String text = links.get(j).text();
+                if (text.contains("셀프") || text.contains("셀박"))
+                    continue;
+                else {
+                    // 상위 게시글 5개 가져오기 용 코드
 //                        String link = links.get(j).attr("href");
-                        count++;
-                    }
+                    count++;
                 }
             }
         }
