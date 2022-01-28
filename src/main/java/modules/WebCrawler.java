@@ -92,7 +92,8 @@ public class WebCrawler {
                     if (text.contains("셀프") || text.contains("셀박"))
                         continue;
                     else {
-                        String link = links.get(j).attr("href");
+                        // 상위 게시글 5개 가져오기 용 코드
+//                        String link = links.get(j).attr("href");
                         count++;
                     }
                 }
