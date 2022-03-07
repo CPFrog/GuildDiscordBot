@@ -16,6 +16,7 @@ public class MembersManager {
         this.gName = name;
     }
 
+    // 로아 공홈에서 해당 캐릭터가 길드원이 맞는지 검색
     public void verify(MessageReceivedEvent event, MemberInfo mi) {
         TextChannel tc = event.getTextChannel();
         String message = event.getMessage().getContentRaw();
@@ -23,8 +24,10 @@ public class MembersManager {
         GuildVerifier vf = new GuildVerifier(gName);
         String name = message.split(" ")[1].trim();
 
+        // 만약 길드원이 맞을 경우
         if (vf.verify(name)) {
             if (!mi.isMember(name)) {
+                // 최초 인증하는 길드원일 경우 인증된 길드원 리스트에 등록하고 역할 부여
                 Member target = event.getMember();
                 mi.signIn(name, target);
                 Role role = guild.getRolesByName("길드원", true).get(0);
@@ -32,22 +35,26 @@ public class MembersManager {
                 guild.addRoleToMember(target.getId(), role).queue();
                 eraser(0, event, 2);
             } else {
+                // 이미 인증된 길드원일 경우 오류 메시지 출력
                 tc.sendMessage(name + "님은 이미 인증된 길드원입니다.").queue();
                 eraser(2, event, 3);
+                // 나중에 필요시 해당 인증을 시도한 디스코드 계정 밴 하는 코드도...
             }
         } else {
+            // 길드원이 아닐 경우 오류 메시지 출력
             tc.sendMessage(name + "님은 " + gName + " 길드에 가입되어있지 않습니다.").queue();
             eraser(2, event, 3);
         }
-
     }
 
+    // 명령어 안내
     public void guide(MessageReceivedEvent event) {
         TextChannel tc = event.getTextChannel();
         tc.sendMessage("이 봇에서 지원되는 명령어입니다.\n!인증 (캐릭터명) : 길드원 인증 명령어입니다.\n!변경 (캐릭터명): 길드에 가입된 본인 캐릭터에 한해 디코 닉네임을 변경할 때 사용하는 명령어입니다.").queue();
         eraser(3, event, 3);
     }
 
+    // 캐릭터명이 변경되거나 기존과 다른 캐릭터로 길드원 인증을 하려는 경우.
     public void nameChange(MessageReceivedEvent event, MemberInfo mi){
         TextChannel tc=event.getTextChannel();
         GuildVerifier vf=new GuildVerifier(gName);

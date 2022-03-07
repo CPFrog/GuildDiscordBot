@@ -54,7 +54,6 @@ public class MessageListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
         String message = event.getMessage().getContentRaw();
-        System.out.printf("[%s] %#s: %s%n", event.getChannel().getName(), event.getAuthor(), event.getMessage().getContentDisplay());
         if (event.getChannel().getName().equals("인증")) {
             if (message.startsWith("!인증"))
                 this.manager.verify(event, mi);
@@ -76,13 +75,10 @@ public class MessageListener extends ListenerAdapter {
                 this.gm.guide(event);
             else if (message.startsWith(".갱신"))
                 mi.refresh(gName);
-            else
+            else if (message.startsWith("."))
                 this.gm.commandError(event);
         } else {
-            if (message.startsWith("!사사게"))
-                this.gm.searchTroubles(event);
-            else
-                System.out.printf("[%s] %#s: %s%n", event.getChannel().getName(), event.getAuthor(), event.getMessage().getContentDisplay());
+            System.out.printf("[%s] %#s: %s%n", event.getChannel().getName(), event.getAuthor(), event.getMessage().getContentDisplay());
         }
     }
 }
