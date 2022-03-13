@@ -1,3 +1,12 @@
+/* MembersManager : 일반 길드원들이 사용하는 명령어의 기능을 제공하는 모듈
+   - setgName : 길드의 이름을 설정하는 메소드.
+   - verify : 로아 공홈에서 해당 캐릭터가 길드원이 맞는지 검색하는 메소드.
+   - guide : 일반 길드원들이 사용할 수 있는 명령어를 보여주는 메소드
+   - nameChange : 캐릭터명이 변경되거나 기존과 다른 캐릭터로 길드원 인증을 하려는 경우.
+   - commandError : 일반 길드원용 커멘드에서 해당 명령어가 없는 경우 오류 문구를 채팅 채널에 출력하는 메소드.
+   - eraser : 명령어 실행 결과 또는 오류 문구를 삭제하기 위해 작성한 메소드.
+ */
+
 package modules;
 
 import net.dv8tion.jda.api.entities.*;
@@ -12,11 +21,12 @@ public class MembersManager {
         setgName(gName);
     }
 
+    // 길드의 이름을 설정하는 함수.
     public void setgName(String name) {
         this.gName = name;
     }
 
-    // 로아 공홈에서 해당 캐릭터가 길드원이 맞는지 검색
+    // 로아 공홈에서 해당 캐릭터가 길드원이 맞는지 검색하는 메소드.
     public void verify(MessageReceivedEvent event, MemberInfo mi) {
         TextChannel tc = event.getTextChannel();
         String message = event.getMessage().getContentRaw();
@@ -55,42 +65,41 @@ public class MembersManager {
     }
 
     // 캐릭터명이 변경되거나 기존과 다른 캐릭터로 길드원 인증을 하려는 경우.
-    public void nameChange(MessageReceivedEvent event, MemberInfo mi){
-        TextChannel tc=event.getTextChannel();
-        GuildVerifier vf=new GuildVerifier(gName);
-        String message= event.getMessage().getContentRaw();
+    public void nameChange(MessageReceivedEvent event, MemberInfo mi) {
+        TextChannel tc = event.getTextChannel();
+        GuildVerifier vf = new GuildVerifier(gName);
+        String message = event.getMessage().getContentRaw();
         String name = message.split(" ")[1].trim();
-        String user=event.getMember().getNickname();
-        Member target= event.getMember();
-        Guild guild=event.getGuild();
+        String user = event.getMember().getNickname();
+        Member target = event.getMember();
+        Guild guild = event.getGuild();
 
-        if(vf.verify(name)){
-            int resultCode=mi.changeName(user,name,target);
-            if(resultCode==0){
-                guild.modifyNickname(target,name).queue();
-                eraser(0,event,3);
-            }
-            else if(resultCode==1){
+        if (vf.verify(name)) {
+            int resultCode = mi.changeName(user, name, target);
+            if (resultCode == 0) {
+                guild.modifyNickname(target, name).queue();
+                eraser(0, event, 3);
+            } else if (resultCode == 1) {
                 tc.sendMessage(name + "님의 닉네임으로 이전에 인증된 내역이 있습니다.\n닉네임 변경을 취소합니다.").queue();
                 eraser(3, event, 3);
+            } else {
+                tc.sendMessage("변경 전 닉네임인 " + user + "으로 인증된 내역을 찾을 수 없어 닉네임 변경을 할 수 없습니다.\n닉네임 변경을 취소합니다.").queue();
+                eraser(4, event, 3);
             }
-            else{
-                tc.sendMessage("변경 전 닉네임인 "+user+"으로 인증된 내역을 찾을 수 없어 닉네임 변경을 할 수 없습니다.\n닉네임 변경을 취소합니다.").queue();
-                eraser(4,event,3);
-            }
-        }
-        else {
+        } else {
             tc.sendMessage(name + "님은 " + gName + " 길드에 가입되어있지 않습니다.").queue();
             eraser(2, event, 3);
         }
     }
 
+    // 일반 길드원용 커멘드에서 해당 명령어가 없는 경우 오류 문구를 채팅 채널에 출력하는 메소드.
     public void commandError(MessageReceivedEvent event) {
         TextChannel tc = event.getTextChannel();
         tc.sendMessage("잘못된 명령어입니다.\n'!명령어'를 사용해 지원되는 명령어 양식을 다시 확인해주세요.").queue();
         eraser(3, event, 3);
     }
 
+    // 명령어 실행 결과 또는 오류 문구를 삭제하기 위해 작성한 메소드.
     private void eraser(float delaySec, MessageReceivedEvent event, int count) {
         try {
             Thread.sleep((int) (delaySec * 1000));

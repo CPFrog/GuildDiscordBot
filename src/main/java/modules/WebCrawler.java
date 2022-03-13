@@ -1,3 +1,11 @@
+/* WebCrawler : 길드원 인증 또는 사사게 검색 시 실제 웹 크롤링을 수행하는 모듈. Jsoup을 기반으로 동작.
+   - Crawl : 전투정보실에서 해당 캐릭터가 가입된 길드 이름을 가져오는 메소드.
+   - getGuild : 캐릭터의 정보를 크롤링 할 때 가입된 길드명 가져오는 메소드.
+   - recent_no : 로스트아크 인벤 사사게 검색 시 가장 최근 게시글의 글 번호를 가져오는 메소드.
+   - getTroubles : 사사게에서 해당 키워드를 제목/내용에 포함하는 게시글이 몇 개나 있는지 알려주는 메소드.
+   TODO: Crawl과 getGuild가 굳이 나눠져있어야 할 필요가 있는지 재검토하고 불필요한 모듈화인 경우 모듈 병합.
+ */
+
 package modules;
 
 import org.jsoup.Jsoup;
@@ -10,7 +18,7 @@ public class WebCrawler {
     private String name;
     private String infoURL = "https://lostark.game.onstove.com/Profile/Character/";
     private final String troubleURL_p1 = "https://www.inven.co.kr/board/lostark/5355";
-    private final String troubleURL_p2 = "?name=subjcont&keyword=";
+    private final String troubleURL_p2 = "?name=subjcont&keyword="; // p1과 일부러 나눠놓은거임. (최초 검색에서는 이부분 필요 X)
     private final String troubleURL_p3 = "&sterm=";
     private String guild = null;
 
@@ -23,6 +31,7 @@ public class WebCrawler {
 
     private Document doc = null;
 
+    // 전투정보실에서 해당 캐릭터가 가입된 길드 이름을 가져오는 메소드.
     private void Crawl() throws IOException {
         this.infoURL += name;
 
@@ -37,7 +46,7 @@ public class WebCrawler {
 
         Elements elem = doc.select("div[class=\"game-info__guild\"]");
 
-        int cnt = 0;
+        // int cnt = 0;
         for (Element e : elem.select("span")) {
             if (e.text().equals("길드"))
                 continue;
@@ -45,6 +54,7 @@ public class WebCrawler {
         }
     }
 
+    // 캐릭터의 정보를 크롤링 할 때 가입된 길드명 가져오는 함수
     public String getGuild() {
         if (guild == null) {
             try {
@@ -56,6 +66,7 @@ public class WebCrawler {
         return guild;
     }
 
+    // 로스트아크 인벤 사사게 검색 시 가장 최근 게시글의 글 번호를 가져오는 메소드.
     private int recent_no() {
         int startNum = 10000000;
         try {
@@ -69,6 +80,7 @@ public class WebCrawler {
         return startNum - Integer.parseInt(numbers.get(1).text());
     }
 
+    // 사사게에서 해당 키워드를 제목/내용에 포함하는 게시글이 몇 개나 있는지 알려주는 메소드.
     public String getTroubles(String keyword) {
         int startNum = recent_no();
         String invenURL = troubleURL_p1 + troubleURL_p2 + keyword + troubleURL_p3;
