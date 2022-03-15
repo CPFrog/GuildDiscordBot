@@ -54,15 +54,22 @@ public class MessageListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) return;
         String message = event.getMessage().getContentRaw();
-        if (event.getChannel().getName().equals("인증")) {
-            if (message.startsWith("!인증"))
-                this.manager.verify(event, mi);
-            else if (message.startsWith("!명령어"))
-                this.manager.guide(event);
-            else if (message.startsWith("!변경") || message.startsWith("!닉변"))
-                this.manager.nameChange(event, mi);
-            else
-                this.manager.commandError(event);
+        if (message.startsWith("!")) {
+            if (event.getChannel().getName().equals("인증")) {
+                if (message.startsWith("!인증"))
+                    this.manager.verify(event, mi);
+                else if (message.startsWith("!명령어"))
+                    this.manager.guide(event);
+                else if (message.startsWith("!변경") || message.startsWith("!닉변"))
+                    this.manager.nameChange(event, mi);
+                else
+                    this.manager.commandError(event);
+            }
+            else{
+                if (message.startsWith("!사사게"))
+                    this.gm.searchTroubles(event);
+                else this.manager.commandError(event);
+            }
         } else if (event.getChannel().getName().equals("임원")) {
             if (message.startsWith(".길드변경") || message.startsWith(".길드설정")) {
                 gName = this.gm.editGuildName(event);

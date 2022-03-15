@@ -14,7 +14,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
 
-public class MembersManager {
+public class MembersManager extends Common {
     private String gName = "";
 
     public MembersManager(String gName) {
@@ -97,19 +97,5 @@ public class MembersManager {
         TextChannel tc = event.getTextChannel();
         tc.sendMessage("잘못된 명령어입니다.\n'!명령어'를 사용해 지원되는 명령어 양식을 다시 확인해주세요.").queue();
         eraser(3, event, 3);
-    }
-
-    // 명령어 실행 결과 또는 오류 문구를 삭제하기 위해 작성한 메소드.
-    private void eraser(float delaySec, MessageReceivedEvent event, int count) {
-        try {
-            Thread.sleep((int) (delaySec * 1000));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        TextChannel tc = event.getTextChannel();
-        MessageHistory mh = new MessageHistory(tc);
-        List<Message> msg = mh.retrievePast(count).complete();
-        tc.deleteMessages(msg).complete();
-        tc.sendMessage("역할을 부여받으려면 '!인증 캐릭터명' 형태로 입력해주세요.").queue();
     }
 }
