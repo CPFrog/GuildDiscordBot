@@ -110,4 +110,15 @@ public class WebCrawler {
         }
         return troubleURL_p1 + troubleURL_p2 + keyword + " " + count;
     }
+
+    public void getSpec(String keyword){
+        String loawaURL="https://loawa.com/char/"+keyword;
+        try {
+            doc = Jsoup.connect(loawaURL).get();
+        } catch (IOException e) {
+            System.out.println("IO 예외 발생!");
+            e.printStackTrace();
+        }
+        // TODO: 템레벨, 세트효과 및 세트레벨, 각인, 보석, 카드 추출
+    }
 }

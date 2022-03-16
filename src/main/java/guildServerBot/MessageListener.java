@@ -67,7 +67,7 @@ public class MessageListener extends ListenerAdapter {
             }
             else{
                 if (message.startsWith("!사사게"))
-                    this.gm.searchTroubles(event);
+                    this.manager.searchTroubles(event);
                 else this.manager.commandError(event);
             }
         } else if (event.getChannel().getName().equals("임원")) {
